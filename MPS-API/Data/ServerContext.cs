@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MPS_API.Models;
 
-namespace MPS_API.Models
+namespace MPS_API.Data
 {
     public partial class ServerContext : DbContext
     {

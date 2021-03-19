@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MPS_API.Data;
 using QMS_API.Helpers.AutoMapper;
 
 namespace MPS_API
@@ -31,15 +26,16 @@ namespace MPS_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MESContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MES")));
+            services.AddDbContext<ServerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Server")));
+            services.AddDbContext<AuthodbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Authodb")));
+            services.AddDbContext<RackDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RackDB")));
+            services.AddDbContext<HPDataDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HPDataDB")));
+            services.AddDbContext<FRIDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("FRIDB")));
 
-            services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MPS_API", Version = "v1" });
-            });
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "MPS_API", Version = "v1" }));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -56,11 +52,10 @@ namespace MPS_API
 
             services.AddCors();
 
-            // services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IMapper>(sp =>
-            {
-                return new Mapper(AutoMapperConfig.RegisterMappings());
-            });
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<IMapper>(sp => new Mapper(AutoMapperConfig.RegisterMappings()));
+
             services.AddSingleton(AutoMapperConfig.RegisterMappings());
         }
 
@@ -77,6 +72,8 @@ namespace MPS_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
