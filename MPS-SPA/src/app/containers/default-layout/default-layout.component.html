@@ -7,14 +7,24 @@
   [asideMenuToggler]="false">
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
-      <h4>Material Preparation System</h4>
+      <h4 class="pt-2">Material Preparation System</h4>
     </li>
   </ul>
   <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item" style="padding-right: 5px;">
+      <div class="btn btn-sm btn-primary text-light font-weight-bold">
+        Version <span class="badge badge-light text-primary ml-1">E210300011</span>
+      </div>
+    </li>
+    <li class="nav-item" style="padding-right: 15px;">
+      <div class="btn btn-sm btn-primary text-light font-weight-bold">
+        Upload Time <span class="badge badge-light text-primary ml-1">2021-03-16 17:39:09</span>
+      </div>
+    </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link mr-4" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
         dropdownToggle (click)="false">
-        <span>Administrator</span>
+        <span> Administrator </span>
         <img src="assets\img\avatars\default.png" class="img-avatar" alt="admin@bootstrapmaster.com" />
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
