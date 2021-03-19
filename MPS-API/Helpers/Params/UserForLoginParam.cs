@@ -1,0 +1,8 @@
+namespace MPS_API.Helpers.Params
+{
+    public class UserForLoginParam
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+}
